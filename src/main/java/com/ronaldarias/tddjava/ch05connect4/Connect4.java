@@ -3,6 +3,7 @@ package com.ronaldarias.tddjava.ch05connect4;
 import java.io.PrintStream;
 import java.util.Arrays;
 import java.util.StringJoiner;
+import java.util.regex.Pattern;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -13,8 +14,10 @@ public class Connect4 {
     private static final String RED = "R";
     private static final String GREEN = "G";
     private static final String DELIMITER = "|";
+    private static final int DISCS_TO_WIN = 4;
 
     private String currentPlayer = RED;
+    private String winner = "";
 
     private String[][] board = new String[ROWS][COLUMNS];
     private PrintStream outputChannel;
@@ -44,6 +47,7 @@ public class Connect4 {
         checkPositionToInsert(row, column);
         board[row][column] = currentPlayer;
         printBoard();
+        checkWinner(row, column);
         switchPlayer();
         return row;
     }
@@ -84,5 +88,23 @@ public class Connect4 {
 
     public boolean isFinished() {
         return getNumberOfDiscs() == ROWS * COLUMNS;
+    }
+
+    public String getWinner() {
+        return winner;
+    }
+
+    private void checkWinner(int row, int column) {
+        if (winner.isEmpty()) {
+            String colour = board[row][column];
+            Pattern winPattern =
+                    Pattern.compile(".*" + colour + "{" + DISCS_TO_WIN + "}.*");
+
+            String vertical = IntStream.range(0, ROWS)
+                    .mapToObj(r -> board[r][column])
+                    .reduce(String::concat).get();
+            if (winPattern.matcher(vertical).matches())
+                winner = colour;
+        }
     }
 }
