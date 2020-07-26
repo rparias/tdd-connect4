@@ -5,7 +5,12 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import java.io.ByteArrayOutputStream;
+import java.io.OutputStream;
+import java.io.PrintStream;
+
 import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.StringContains.containsString;
 import static org.junit.Assert.assertThat;
 
 public class Connect4Spec {
@@ -13,11 +18,13 @@ public class Connect4Spec {
     @Rule
     public ExpectedException exception = ExpectedException.none();
 
+    private OutputStream output;
     private Connect4 tested;
 
     @Before
     public void init() {
-        tested = new Connect4();
+        output = new ByteArrayOutputStream();
+        tested = new Connect4(new PrintStream(output));
     }
 
     @Test
@@ -75,5 +82,18 @@ public class Connect4Spec {
     public void whenSecondPlayerPlaysThenDiscColorIsGreen() {
         tested.putDiscInColumn(1);
         assertThat(tested.getCurrentPlayer(), is("G"));
+    }
+
+    @Test
+    public void whenAskedForCurrentPlayerThenOutputNotice() {
+        tested.getCurrentPlayer();
+        assertThat(output.toString(), containsString("Player R turn"));
+    }
+
+    @Test
+    public void whenADiscIsIntroducedThenBoardIsPrinted() {
+        int column = 1;
+        tested.putDiscInColumn(column);
+        assertThat(output.toString(), containsString("| |R| | | | | |"));
     }
 }

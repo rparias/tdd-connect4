@@ -1,7 +1,10 @@
 package com.ronaldarias.tddjava.ch05connect4;
 
+import java.io.PrintStream;
 import java.util.Arrays;
+import java.util.StringJoiner;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 public class Connect4 {
     private static final int COLUMNS = 7;
@@ -9,12 +12,15 @@ public class Connect4 {
     private static final String EMPTY = " ";
     private static final String RED = "R";
     private static final String GREEN = "G";
+    private static final String DELIMITER = "|";
 
     private String currentPlayer = RED;
 
     private String[][] board = new String[ROWS][COLUMNS];
+    private PrintStream outputChannel;
 
-    public Connect4() {
+    public Connect4(PrintStream outputChannel) {
+        this.outputChannel = outputChannel;
         for (String[] row: board) {
             Arrays.fill(row, EMPTY);
         }
@@ -36,7 +42,8 @@ public class Connect4 {
         checkColumn(column);
         int row = getNumberOfDiscsInColumn(column);
         checkPositionToInsert(row, column);
-        board[row][column] = "X";
+        board[row][column] = currentPlayer;
+        printBoard();
         switchPlayer();
         return row;
     }
@@ -54,10 +61,24 @@ public class Connect4 {
     }
 
     public String getCurrentPlayer() {
+        outputChannel.printf("Player %s turn%n", currentPlayer);
         return currentPlayer;
     }
 
     private void switchPlayer() {
         currentPlayer = currentPlayer.equals(RED) ? GREEN : RED;
+    }
+
+    private void printBoard() {
+        for (int row = ROWS - 1; row >= 0; row--) {
+            StringJoiner stringJoiner =
+                    new StringJoiner(DELIMITER,
+                            DELIMITER,
+                            DELIMITER);
+            Stream.of(board[row])
+                    .forEachOrdered(stringJoiner::add);
+            outputChannel
+                    .println(stringJoiner.toString());
+        }
     }
 }
