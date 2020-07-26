@@ -7,6 +7,10 @@ public class Connect4 {
     private static final int COLUMNS = 7;
     private static final int ROWS = 6;
     private static final String EMPTY = " ";
+    private static final String RED = "R";
+    private static final String GREEN = "G";
+
+    private String currentPlayer = RED;
 
     private String[][] board = new String[ROWS][COLUMNS];
 
@@ -33,6 +37,7 @@ public class Connect4 {
         int row = getNumberOfDiscsInColumn(column);
         checkPositionToInsert(row, column);
         board[row][column] = "X";
+        switchPlayer();
         return row;
     }
 
@@ -46,5 +51,13 @@ public class Connect4 {
         if (row == ROWS)
             throw new RuntimeException(
                     "No more room in column " + column);
+    }
+
+    public String getCurrentPlayer() {
+        return currentPlayer;
+    }
+
+    private void switchPlayer() {
+        currentPlayer = currentPlayer.equals(RED) ? GREEN : RED;
     }
 }
