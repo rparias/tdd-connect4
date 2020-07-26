@@ -81,4 +81,8 @@ public class Connect4 {
                     .println(stringJoiner.toString());
         }
     }
+
+    public boolean isFinished() {
+        return getNumberOfDiscs() == ROWS * COLUMNS;
+    }
 }
