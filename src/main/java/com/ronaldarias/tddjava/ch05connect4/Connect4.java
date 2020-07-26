@@ -105,6 +105,13 @@ public class Connect4 {
                     .reduce(String::concat).get();
             if (winPattern.matcher(vertical).matches())
                 winner = colour;
+
+            String horizontal = Stream
+                    .of(board[row])
+                    .reduce(String::concat).get();
+            if (winPattern.matcher(horizontal)
+                    .matches())
+                winner = colour;
         }
     }
 }

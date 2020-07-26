@@ -123,4 +123,17 @@ public class Connect4Spec {
         tested.putDiscInColumn(1); // R
         assertThat(tested.getWinner(), is("R"));
     }
+
+    @Test
+    public void when4HorizontalDiscsAreConnectedThenPlayerWins() {
+        int column;
+        for (column = 0; column < 3; column++) {
+            tested.putDiscInColumn(column); // R
+            tested.putDiscInColumn(column); // G
+        }
+        assertThat(tested.getWinner(),
+                isEmptyString());
+        tested.putDiscInColumn(column); // R
+        assertThat(tested.getWinner(), is("R"));
+    }
 }
