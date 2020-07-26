@@ -136,4 +136,24 @@ public class Connect4Spec {
         tested.putDiscInColumn(column); // R
         assertThat(tested.getWinner(), is("R"));
     }
+
+    @Test
+    public void when4Diagonal1DiscsAreConnectedThenThatPlayerWins()
+    {
+        int[] gameplay = new int[] {1, 2, 2, 3, 4, 3, 3, 4, 4, 5, 4};
+        for (int column : gameplay) {
+            tested.putDiscInColumn(column);
+        }
+        assertThat(tested.getWinner(), is("R"));
+    }
+
+    @Test
+    public void when4Diagonal2DiscsAreConnectedThenThatPlayerWins()
+    {
+        int[] gameplay = new int[] {3, 4, 2, 3, 2, 2, 1, 1, 1, 1};
+        for (int column : gameplay) {
+            tested.putDiscInColumn(column);
+        }
+        assertThat(tested.getWinner(), is("G"));
+    }
 }
